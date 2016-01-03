@@ -1,24 +1,47 @@
 package org.foxail.android.screenhaze;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+
 import java.io.DataOutputStream;
 import java.io.OutputStream;
 
 public class PermissionUtil {
 
-    // Linux command of grant permission android.permission.WRITE_SECURE_SETTINGS to this app
-    private final static String GRANT_PERMISSION = "pm grant org.foxail.android.screenhaze android.permission.WRITE_SECURE_SETTINGS";
+    // Permssion: android.permission.WRITE_SECURE_SETTINGS
+    private final static String PMS_WRITE_SECURE_SETTINGS = "android.permission.WRITE_SECURE_SETTINGS";
 
-    // grant permission
-    public static boolean grantPermission(){
-        return execRootCmd(GRANT_PERMISSION);
+    /**
+     * grant permission
+     *
+     * @return
+     */
+    static boolean grantPermission(Context context){
+        String packageName = context.getPackageName();
+        PackageManager pm = context.getPackageManager();
+        int permissionGranted = pm.checkPermission(PMS_WRITE_SECURE_SETTINGS, packageName);
+        if(PackageManager.PERMISSION_DENIED == permissionGranted){
+            String cmd = "pm grant " + packageName + " " + PMS_WRITE_SECURE_SETTINGS;
+            return execRootCmd(cmd);
+        } else {
+            return true;
+        }
     }
 
-    // check if this device have been rooted
-    public static boolean isRooted() {
+    /**
+     * check if this device have been rooted
+     *
+     */
+    static boolean isRooted() {
         return execRootCmd("echo test");
     }
 
-    // execute Linux command
+    /**
+     * execute Linux command
+     *
+     * @param command
+     * @return If the command is executed successfully
+     */
     private static boolean execRootCmd(String command) {
         try {
             Process process = Runtime.getRuntime().exec("su");

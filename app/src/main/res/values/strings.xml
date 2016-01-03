@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Screen Haze</string>
+    <string name="haze_view_title">haze</string>
 </resources>
