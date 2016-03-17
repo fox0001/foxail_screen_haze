@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoDisplay">
         <activity
-            android:name=".ScreenHaze">
+            android:name=".ScreenHaze"
+            android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".HazeService" android:process=":remote"></service>
+        <service android:name=".HazeService"></service>
     </application>
 
 </manifest>

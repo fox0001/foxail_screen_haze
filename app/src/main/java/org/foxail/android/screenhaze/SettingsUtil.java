@@ -1,5 +1,7 @@
 package org.foxail.android.screenhaze;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +25,8 @@ public class SettingsUtil {
 
     private final static String ACCESSIBILITY_DISPLAY_DALTONIZER_ENABLED = "accessibility_display_daltonizer_enabled";
     private final static String ACCESSIBILITY_DISPLAY_DALTONIZER = "accessibility_display_daltonizer";
+
+    public final static int NOTIFICATION_ID = 1;
 
     // The file name of settings xml
     public final static String FILE_NAME = "settings";
@@ -62,12 +66,29 @@ public class SettingsUtil {
         }
     }
 
+    public static Notification createNotification(Context context) {
+        Notification notification = new Notification.Builder(context)
+                .setSmallIcon(R.mipmap.notice)
+                .setContentTitle(context.getText(R.string.app_name))
+                .setContentText(context.getText(R.string.notification_content))
+                .setOngoing(true)
+                .setAutoCancel(true)
+                .build();
+        //notification.flags |= (Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT);
+        return notification;
+    }
+
+    public static void hideNotification(Context context) {
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
+                .cancel(NOTIFICATION_ID);
+    }
+
     public static void showSingleColor(ContentResolver contentResolver) {
-        int devMode = Settings.Secure.getInt(contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0);
+        int devMode = Settings.Global.getInt(contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0);
         int enableMode = Settings.Secure.getInt(contentResolver, ACCESSIBILITY_DISPLAY_DALTONIZER_ENABLED, 0);
 
         if (devMode == 0) {
-            Settings.Secure.putInt(contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 1);
+            Settings.Global.putInt(contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 1);
         }
         if (enableMode == 0) {
             Settings.Secure.putInt(contentResolver, ACCESSIBILITY_DISPLAY_DALTONIZER_ENABLED, 1);
@@ -76,7 +97,7 @@ public class SettingsUtil {
     }
 
     public static void showFullColor(ContentResolver contentResolver) {
-        int devMode = Settings.Secure.getInt(contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0);
+        int devMode = Settings.Global.getInt(contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0);
         int enableMode = Settings.Secure.getInt(contentResolver, ACCESSIBILITY_DISPLAY_DALTONIZER_ENABLED, 0);
 
         if (devMode == 0) {
@@ -107,6 +128,7 @@ public class SettingsUtil {
 
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         Display display = windowManager.getDefaultDisplay();
+        /*
         try {
             Method getHeight = Display.class.getMethod("getRawHeight", new Class[0]);
             Method getWidth = Display.class.getMethod("getRawWidth", new Class[0]);
@@ -115,6 +137,7 @@ public class SettingsUtil {
         } catch (Exception e) {
             Log.w(TAG, "Could not get raw size of display", e);
         }
+        */
         DisplayMetrics displayMetrics = new DisplayMetrics();
         try {
             Method getMetrics = Display.class.getMethod("getRealMetrics", DisplayMetrics.class);
@@ -133,7 +156,7 @@ public class SettingsUtil {
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.windowAnimations = android.R.style.Animation_Toast;
         layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
-        layoutParams.setTitle(context.getString(R.string.haze_view_title));
+        //layoutParams.setTitle(context.getString(R.string.haze_view_title));
         layoutParams.gravity = Gravity.FILL;
         layoutParams.x = 0;
         layoutParams.y = 0;
