@@ -9,30 +9,65 @@
 	android:layout_alignParentTop="true"
 	tools:context=".HazeSettings">
 
-	<TextView
-		android:id="@+id/textView1"
+	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textSize="20sp"
-		android:text="Darkness Rate"
-		android:layout_margin="15dp"/>
+		android:layout_alignParentTop="true"
+		android:orientation="horizontal"
+		android:weightSum="1">
+
+		<TextView
+			android:id="@+id/textView1"
+			android:layout_width="166dp"
+			android:layout_height="wrap_content"
+			android:layout_margin="15dp"
+			android:text="@string/txt_darkness_rate"
+			android:textSize="20sp" />
+
+		<EditText
+			android:id="@+id/rateNum"
+			android:layout_width="40dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="0.21"
+			android:ems="10"
+			android:inputType="number"
+			android:max="100"
+			android:maxLines="1"
+			android:min="0" />
+
+	</LinearLayout>
 
 	<SeekBar
 		android:id="@+id/rateSeekBar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:min="0"
 		android:max="100"
 		android:layout_margin="15dp"/>
 
 	<Switch
-		android:id="@+id/isSingleColor"
+		android:id="@+id/singleColorSwitch"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Show black and white"
+		android:text="@string/txt_single_color"
 		android:textSize="20sp"
 		android:layout_margin="15dp"/>
 
-	
+	<Button
+		android:id="@+id/runBtn"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/btn_run"
+		android:textSize="24sp"
+		android:layout_margin="10dp" />
+
+	<Button
+		android:id="@+id/exitBtn"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/btn_exit"
+		android:textSize="24sp"
+		android:layout_margin="10dp" />
 
 </LinearLayout>
 

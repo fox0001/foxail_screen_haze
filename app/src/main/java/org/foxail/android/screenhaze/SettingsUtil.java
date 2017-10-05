@@ -40,11 +40,9 @@ public class SettingsUtil {
 
     public final static String ITEM_FIRST_RUN = "first_run";
 
-    public final static String ITEM_IS_RUNNING = "is_running";
-
     public final static String ITEM_ENABLE_SINGLE_COLOR = "enable_single_color";
 
-    public final static String ITEM_HAZE_WEIGHT_SCALE = "haze_weight_scale";
+    public final static String ITEM_DARKNESS_RATE = "darkness_rate";
 
 
     public static SharedPreferences getPreferences(Context context) {
@@ -67,7 +65,7 @@ public class SettingsUtil {
 
             // setting default values
             editor.putBoolean(SettingsUtil.ITEM_ENABLE_SINGLE_COLOR, true);
-            editor.putInt(SettingsUtil.ITEM_HAZE_WEIGHT_SCALE, 50);
+            editor.putInt(SettingsUtil.ITEM_DARKNESS_RATE, 50);
 
             editor.commit();
         }

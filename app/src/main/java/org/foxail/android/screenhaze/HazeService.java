@@ -54,7 +54,7 @@ public class HazeService extends Service {
         
         if(windowManager != null) {
             Log.d(TAG, "showHaze");
-            int scale = preferences.getInt(SettingsUtil.ITEM_HAZE_WEIGHT_SCALE, 0);
+            int scale = preferences.getInt(SettingsUtil.ITEM_DARKNESS_RATE, 0);
             hazeView = SettingsUtil.showHaze(this, windowManager, scale);
         }
         

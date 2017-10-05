@@ -3,4 +3,6 @@
     <string name="app_name">Screen Haze</string>
     <string name="notification_content">Running</string>
     <string name="app_settings">Screen Haze Settings</string>
+    <string name="btn_run">Run</string>
+    <string name="btn_exit">Exit</string>
 </resources>
