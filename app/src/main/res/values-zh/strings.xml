@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">屏雾</string>
     <string name="notification_content">正在运行</string>
+    <string name="app_settings">屏雾设置</string>
 </resources>

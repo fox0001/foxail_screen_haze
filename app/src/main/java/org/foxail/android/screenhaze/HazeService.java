@@ -17,9 +17,9 @@ public class HazeService extends Service {
 
     public final static String TAG = "HazeService";
 
-    //private static WindowManager windowManager = null;
+    private static WindowManager windowManager = null;
     //private static ContentResolver contentResolver = null;
-    //private static View hazeView = null;
+    private static View hazeView = null;
 
     private final IBinder binder = new LocalBinder();
 
@@ -38,6 +38,10 @@ public class HazeService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate() executed");
+        
+        if(windowManager == null) {
+            initWindowManager();
+        }
     }
 
     @Override
@@ -45,6 +49,19 @@ public class HazeService extends Service {
         Log.d(TAG, "onStartCommand() executed");
 
         int result = super.onStartCommand(intent, flags, startId);
+        
+        SharedPreferences preferences = SettingsUtil.getPreferences(this);
+        
+        if(windowManager != null) {
+            Log.d(TAG, "showHaze");
+            int scale = preferences.getInt(SettingsUtil.ITEM_HAZE_WEIGHT_SCALE, 0);
+            hazeView = SettingsUtil.showHaze(this, windowManager, scale);
+        }
+        
+        if (preferences.getBoolean(SettingsUtil.ITEM_ENABLE_SINGLE_COLOR, false)) {
+            Log.d(TAG, "showSingleColor");
+            SettingsUtil.showSingleColor(getContentResolver());
+        }
 
         Notification notification = SettingsUtil.createNotification(getBaseContext());
         try {
@@ -64,6 +81,17 @@ public class HazeService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy() executed");
+        
+        SharedPreferences preferences = SettingsUtil.getPreferences(this);
+                
+        if (preferences.getBoolean(SettingsUtil.ITEM_ENABLE_SINGLE_COLOR, false)) {
+            Log.d(TAG, "showFullColor");
+            SettingsUtil.showFullColor(getContentResolver());
+        }
+
+        Log.d(TAG, "hideHaze");
+        SettingsUtil.hideHaze(hazeView, windowManager);
+        hazeView = null;
 
         setForegroundBackwardsCompat(false);
         SettingsUtil.hideNotification(getBaseContext());
@@ -75,6 +103,14 @@ public class HazeService extends Service {
                     .invoke(this, new Object[]{Boolean.valueOf(foreground)});
         } catch(Exception e) {
             Log.w(TAG, "Error calling setForeground", e);
+        }
+    }
+    
+    private void initWindowManager(){
+        try {
+            windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        } catch (Exception e) {
+            Log.e(TAG, "Can not get WindowManage.", e);
         }
     }
 }

@@ -1,10 +1,14 @@
 package org.foxail.android.screenhaze;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
@@ -18,11 +22,14 @@ import android.view.View;
 import android.view.WindowManager;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class SettingsUtil {
 
     private final static String TAG = "SettingsUtil";
 
+    private final static String HAZE_SERVICE_CLASS_NAME = "org.foxail.android.screenhaze.HazeService";
+    
     private final static String ACCESSIBILITY_DISPLAY_DALTONIZER_ENABLED = "accessibility_display_daltonizer_enabled";
     private final static String ACCESSIBILITY_DISPLAY_DALTONIZER = "accessibility_display_daltonizer";
 
@@ -67,12 +74,16 @@ public class SettingsUtil {
     }
 
     public static Notification createNotification(Context context) {
+        Intent intent = new Intent(context, HazeSettings.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        
         Notification notification = new Notification.Builder(context)
                 .setSmallIcon(R.mipmap.notice)
                 .setContentTitle(context.getText(R.string.app_name))
                 .setContentText(context.getText(R.string.notification_content))
                 .setOngoing(true)
                 .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
                 .build();
         //notification.flags |= (Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT);
         return notification;
@@ -176,6 +187,22 @@ public class SettingsUtil {
             windowManager.removeView(hazeView);
             hazeView = null;
         }
+    }
+    
+    public static boolean isRunning(Context context) {
+        ActivityManager am = (ActivityManager) context
+            .getSystemService(Context.ACTIVITY_SERVICE);
+        List<RunningServiceInfo> serviceList = am.getRunningServices(100);
+        if (serviceList == null || serviceList.isEmpty()) {
+            return false;
+        }
+        for (RunningServiceInfo serviceInfo : serviceList) {
+            String serviceClassName = serviceInfo.service.getClassName().toString();
+            if (HAZE_SERVICE_CLASS_NAME.equals(serviceClassName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

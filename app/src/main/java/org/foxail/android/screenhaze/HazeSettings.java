@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-public class Settings extends Activity {
+public class HazeSettings extends Activity {
 
 	private final static String TAG = "ScreenHazeSettings";
 
@@ -15,9 +15,12 @@ public class Settings extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        stopService(new Intent(this, HazeService.class));
+        /*
         Intent intent = new Intent(this, ScreenHaze.class);
         intent.putExtra(ScreenHaze.SWITCH_ACTION, ScreenHaze.SWITCH_ACTION_STOP);
         this.startActivity(intent);
+        */
 
         //finish();
         //System.exit(0);
