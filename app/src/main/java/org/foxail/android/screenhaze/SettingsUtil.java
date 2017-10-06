@@ -124,7 +124,7 @@ public class SettingsUtil {
         if(scale > 100) {
             scale = 100;
         }
-        float dimAmount = (float) (100 - scale) / 100;
+        float dimAmount = (float) scale / 100;
 
         View hazeView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.haze_view, null);
